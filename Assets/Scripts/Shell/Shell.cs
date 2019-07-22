@@ -6,6 +6,7 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     private Rigidbody rigidbody;
+    
     public Vector3 direction;
     public float power;
 
@@ -13,5 +14,10 @@ public class Shell : MonoBehaviour
     {
         rigidbody = this.GetComponent<Rigidbody>();
         rigidbody.AddForce(direction * power);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        print("enter");
     }
 }
