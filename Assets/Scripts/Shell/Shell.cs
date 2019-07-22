@@ -1,12 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Shell : MonoBehaviour
 {
-    // Update is called once per frame
-    void Update()
+    private Rigidbody rigidbody;
+    public Vector3 direction;
+    public float power;
+
+    private void Start()
     {
-        this.transform.Translate(Vector3.forward * 1.0f);
+        rigidbody = this.GetComponent<Rigidbody>();
+        rigidbody.AddForce(direction * power);
     }
 }
