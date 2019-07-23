@@ -1,22 +1,21 @@
 ﻿using UnityEngine;
 
 public class TankMovement : MonoBehaviour
-{
-    public int m_PlayerNumber = 1;         
+{   
+    //속도
     public float m_Speed = 12f;            
     public float m_TurnSpeed = 180f;       
-    public AudioSource m_MovementAudio;    
-    public AudioClip m_EngineIdling;       
-    public AudioClip m_EngineDriving;      
-    public float m_PitchRange = 0.2f;
 
-    /*
+    //입력 축
     private string m_MovementAxisName;     
-    private string m_TurnAxisName;         
-    private Rigidbody m_Rigidbody;         
+    private string m_TurnAxisName;
+    
+    //물리엔진 컴포넌트 값 true-끔 false-킴
+    private Rigidbody m_Rigidbody;
+    
+    //전후방, 회전 입력값
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
-    private float m_OriginalPitch;         
 
 
     private void Awake()
@@ -41,39 +40,44 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
-        m_MovementAxisName = "Vertical" + m_PlayerNumber;
-        m_TurnAxisName = "Horizontal" + m_PlayerNumber;
-
-        m_OriginalPitch = m_MovementAudio.pitch;
+        m_MovementAxisName = "Vertical";
+        m_TurnAxisName = "Horizontal";
     }
-    */
 
-    private void Update()
+    //앞,뒤, 회전 입력받는거
+    private void Update() 
     {
-        // Store the player's input and make sure the audio for the engine is playing.
+        m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
+        m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
+
     }
-
-
-    private void EngineAudio()
-    {
-        // Play the correct audio clip based on whether or not the tank is moving and what audio is currently playing.
-    }
-
-
+    //업데이트대로 실행
     private void FixedUpdate()
     {
-        // Move and turn the tank.
+        Move();
+        Turn();
     }
 
 
     private void Move()
     {
-        // Adjust the position of the tank based on the player's input.
+        //탱크 움직이는 벡터값 입력
+        Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
+
+        //rigidbody를 옮겨준다
+        m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
     }
 
 
     private void Turn()
     {
-        // Adjust the rotation of the tank based on the player's input.
+        //탱크 회전시키는 값 입력
+        float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
+
+        //회전시켜줘
+        Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
+
+        //rigidbody에도 적용시커줘
+        m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
     }
 }
