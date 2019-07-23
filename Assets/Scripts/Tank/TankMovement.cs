@@ -1,54 +1,58 @@
 ﻿using UnityEngine;
 
 public class TankMovement : MonoBehaviour
-{
-    public int m_PlayerNumber = 1;         //플레이어 넘버
-    public float m_Speed = 12f;            //이동속도
-    public float m_TurnSpeed = 180f;       //회전속도
+{   
+    //속도
+    public float m_Speed = 12f;            
+    public float m_TurnSpeed = 180f;       
 
+    //입력 축
+    private string m_MovementAxisName;     
+    private string m_TurnAxisName;
     
-    private string m_MovementAxisName;     //앞뒤 축
-    private string m_TurnAxisName;         //회전 축
-    private Rigidbody m_Rigidbody;         //컴포넌트 담는거
-    private float m_MovementInputValue;    //앞뒤
-    private float m_TurnInputValue;        //회전
+    //물리엔진 컴포넌트 값 true-끔 false-킴
+    private Rigidbody m_Rigidbody;
+    
+    //전후방, 회전 입력값
+    private float m_MovementInputValue;    
+    private float m_TurnInputValue;        
 
 
     private void Awake()
     {
-        m_Rigidbody = GetComponent<Rigidbody>(); //컴포넌트 rigidbody 갖고오기, rigidbody는 게임 오브젝트가 물리엔진의 영향을 받게 만드는 기능
+        m_Rigidbody = GetComponent<Rigidbody>();
     }
 
 
     private void OnEnable ()
     {
-        m_Rigidbody.isKinematic = false; //true일 경우 물리엔진에 의해서는 이동하지 않고 애니메이션이나 Transform컴포넌트를 통해서만 이동
-        m_MovementInputValue = 0f; //초기화
-        m_TurnInputValue = 0f; //초기화
+        m_Rigidbody.isKinematic = false;
+        m_MovementInputValue = 0f;
+        m_TurnInputValue = 0f;
     }
 
 
     private void OnDisable ()
     {
-        m_Rigidbody.isKinematic = true; //물리엔진의 영향을 받지 않는다.
+        m_Rigidbody.isKinematic = true;
     }
 
 
     private void Start()
     {
-        m_MovementAxisName = "Vertical" + m_PlayerNumber;
-        m_TurnAxisName = "Horizontal" + m_PlayerNumber;
+        m_MovementAxisName = "Vertical";
+        m_TurnAxisName = "Horizontal";
     }
-    
 
-    private void Update() //입력받는거
+    //앞,뒤, 회전 입력받는거
+    private void Update() 
     {
-        m_MovementInputValue = Input.GetAxis(m_MovementAxisName); //앞뒤
-        m_TurnInputValue = Input.GetAxis(m_TurnAxisName); //회전
+        m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
+        m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
 
     }
-
-    private void FixedUpdate() //업데이트대로 실행
+    //업데이트대로 실행
+    private void FixedUpdate()
     {
         Move();
         Turn();
