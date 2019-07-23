@@ -6,6 +6,7 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     private Rigidbody rigidbody;
+    private Camera camera;
     
     public Vector3 direction;
     public float power;
@@ -15,6 +16,13 @@ public class Shell : MonoBehaviour
     {
         rigidbody = this.GetComponent<Rigidbody>();
         rigidbody.AddForce(direction * power);
+
+        camera = this.GetComponentInChildren<Camera>();
+    }
+
+    private void FixedUpdate()
+    {
+        camera.transform.LookAt(rigidbody.velocity);
     }
 
     private void OnCollisionEnter(Collision other)
