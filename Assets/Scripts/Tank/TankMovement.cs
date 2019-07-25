@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
 public class TankMovement : MonoBehaviour
-{   
+{
+    public int m_PlayerNumber = 1;
     //속도
     public float m_Speed = 12f;            
     public float m_TurnSpeed = 180f;       
