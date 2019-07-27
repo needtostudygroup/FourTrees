@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class Fire : MonoBehaviour
 {
-    private float MIN_Power = 500.0f;
-    private float MAX_Power = 3000.0f;
+    private float MIN_POWER = 500.0f;
+    private float MAX_POWER = 3000.0f;
     public float currentPower;
     private float PushTime = 0.9f;
-    private bool isPushed = false;
+    private bool isSpacePressed = false;
     public Transform firePosition;
     private float chargeSpeed;
     public Slider PowerGage;
@@ -19,32 +19,36 @@ public class Fire : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentPower = MIN_Power;
-        PowerGage.maxValue = MAX_Power;
+        currentPower = MIN_POWER;
+        PowerGage.maxValue = MAX_POWER;
         PowerGage.value = currentPower;
-        chargeSpeed = (MAX_Power - MIN_Power) / PushTime;
+        chargeSpeed = (MAX_POWER - MIN_POWER) / PushTime;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) == true)//push space bar
+        //push space bar
+        if (Input.GetKeyDown(KeyCode.Space) == true)
         {
             shell.direction = this.transform.forward + new Vector3(0, 1.0f, 0);
-            isPushed = true;
+            isSpacePressed = true;
         }
-        else if (Input.GetKeyUp(KeyCode.Space))//released spcae bar
+        //released spcae bar
+        else if (Input.GetKeyUp(KeyCode.Space))
         {
-            if (currentPower >= MAX_Power)
-                currentPower = MAX_Power;
+            if (currentPower >= MAX_POWER)
+                currentPower = MAX_POWER;
             shell.power = currentPower;
             Instantiate(shell, firePosition.position, firePosition.rotation);
-            isPushed = false;
-            currentPower = MIN_Power;//reset
-            shell.power = MIN_Power;//reset
+            isSpacePressed = false;
+            //reset
+            currentPower = MIN_POWER;
+            shell.power = MIN_POWER;
         }
-        if (isPushed)//space bar is being pushed
+        //space bar is being pressed
+        if (isSpacePressed)
         {
             currentPower += chargeSpeed * Time.deltaTime;
             PowerGage.value = currentPower;
