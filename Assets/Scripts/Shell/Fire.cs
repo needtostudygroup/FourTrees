@@ -9,8 +9,8 @@ public class Fire : MonoBehaviour
     private const float MIN_POWER = 500.0f;
     private const float MAX_POWER = 3000.0f;
     public float currentPower;
-    private const float PUSHTIME = 0.9f;
-    private bool isSpacePressed = false;
+    private const float PUSH_TIME = 0.9f;
+    private bool IsSpacePressed = false;
     public Transform firePosition;
     private float chargeSpeed;
     public Slider powerGage;
@@ -22,7 +22,7 @@ public class Fire : MonoBehaviour
         currentPower = MIN_POWER;
         powerGage.maxValue = MAX_POWER;
         powerGage.value = currentPower;
-        chargeSpeed = (MAX_POWER - MIN_POWER) / PUSHTIME;
+        chargeSpeed = (MAX_POWER - MIN_POWER) / PUSH_TIME;
     }
 
 
@@ -33,7 +33,7 @@ public class Fire : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) == true)
         {
             shell.direction = this.transform.forward + new Vector3(0, 1.0f, 0);
-            isSpacePressed = true;
+            IsSpacePressed = true;
         }
         //released spcae bar
         else if (Input.GetKeyUp(KeyCode.Space))
@@ -42,16 +42,16 @@ public class Fire : MonoBehaviour
                 currentPower = MAX_POWER;
             shell.power = currentPower;
             Instantiate(shell, firePosition.position, firePosition.rotation);
-            isSpacePressed = false;
+            IsSpacePressed = false;
             //reset
             currentPower = MIN_POWER;
             shell.power = MIN_POWER;
         }
         //space bar is being pressed
-        if (isSpacePressed)
+        if (IsSpacePressed)
         {
             currentPower += chargeSpeed * Time.deltaTime;
             powerGage.value = currentPower;
-        }
+        } 
     }
 }
