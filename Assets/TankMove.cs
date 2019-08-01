@@ -12,27 +12,22 @@ public class TankMove : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            move(Vector3.forward * speed * Time.deltaTime);
+            transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
         
         if (Input.GetKey(KeyCode.A))
         {
-            move(Vector3.left * speed * Time.deltaTime);
+            transform.Translate(Vector3.left * speed * Time.deltaTime);
         }
         
         if (Input.GetKey(KeyCode.S))
         {
-            move(Vector3.back * speed * Time.deltaTime);
+            transform.Translate(Vector3.back * speed * Time.deltaTime);
         }
         
         if (Input.GetKey(KeyCode.D))
         {
-            move(Vector3.right * speed * Time.deltaTime);
+            transform.Translate(Vector3.right * speed * Time.deltaTime);
         }
-    }
-
-    private void move(Vector3 movePoint)
-    {
-        transform.Translate(movePoint);
     }
 }
