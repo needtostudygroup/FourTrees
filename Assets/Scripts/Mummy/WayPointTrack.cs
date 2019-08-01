@@ -15,14 +15,14 @@ public class WayPointTrack : MonoBehaviour
         points = GetComponentsInChildren<Transform>();
 
         int nextIndex = 1;
-
-        Vector3 currPos = points[nextIndex].position;   //현재 가야 할 위치
-        Vector3 nextPos;    //다음에 가야 할 위치
+        //현재 가야 할 위치
+        Vector3 currPos = points[nextIndex].position;
+        //다음에 가야 할 위치
+        Vector3 nextPos;
 
         //Point를 순회하면서 라인 그리기
         for (int i = 1; i < points.Length; i++) {
-            //마지막 Point일 때 첫 번째 Point로 지정
-            //nextPos = (++nextIndex >= points.Length) ? points[1].position : points[nextIndex].position;
+            //다음 위치 지정
             nextPos = points[nextIndex++].position;
             //시작 위치에서 종료 위치까지 라인을 그림
             Gizmos.DrawLine(currPos, nextPos);
@@ -38,7 +38,7 @@ public class WayPointTrack : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update() 
     {
         
     }

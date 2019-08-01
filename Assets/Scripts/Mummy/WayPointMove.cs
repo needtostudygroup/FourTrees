@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class WayPointMove : MonoBehaviour
 {
-    public float speed = 1.0f;  //이동 속도
-    public float damping = 1.0f;    //회전 속도 조절 계수
+    //이동 속도
+    public float speed = 1.0f;
+    //회전 속도 조절 계수
+    public float damping = 1.0f;    
 
     private Transform tr;
     private Transform[] points;
@@ -16,7 +18,6 @@ public class WayPointMove : MonoBehaviour
     {
         tr = GetComponent<Transform>();
         points = GameObject.Find("WayPointGroup").GetComponentsInChildren<Transform>();
-        Debug.Log(points.Length);
     }
 
     // Update is called once per frame
