@@ -4,44 +4,44 @@ using UnityEngine;
 
 public class TankMove : MonoBehaviour
 {
-    public float Speed = 12f;
-    public float TurnSpeed = 180f;
+    public float speed = 12f;
+    public float turnSpeed = 180f;
 
-    private string MovementAxisName;
-    private string TurnAxisName;
+    private string movementAxisName;
+    private string turnAxisName;
 
-    private Rigidbody Rigidbody;
+    private Rigidbody rigidbody;
 
-    private float MovementInputValue;
-    private float TurnInputValue;
+    private float movementInputValue;
+    private float turnInputValue;
 
     void Start()
     {
-        Rigidbody = GetComponent<Rigidbody>();
-        Rigidbody.isKinematic = true;
+        rigidbody = GetComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
 
-        MovementAxisName = "Vertical";
-        TurnAxisName = "Horizontal";
+        movementAxisName = "Vertical";
+        turnAxisName = "Horizontal";
 
     }
 
     void Update()
     {
-        MovementInputValue = Input.GetAxis(MovementAxisName);
-        TurnInputValue = Input.GetAxis(TurnAxisName);
+        movementInputValue = Input.GetAxis(movementAxisName);
+        turnInputValue = Input.GetAxis(turnAxisName);
 
-        Vector3 movement = transform.forward * MovementInputValue * Speed * Time.deltaTime;
+        Vector3 movement = transform.forward * movementInputValue * speed * Time.deltaTime;
 
         //rigidbody를 옮겨준다
-        Rigidbody.MovePosition(Rigidbody.position + movement);
+        rigidbody.MovePosition(rigidbody.position + movement);
 
-        float turn = TurnInputValue * TurnSpeed * Time.deltaTime;
+        float turn = turnInputValue * turnSpeed * Time.deltaTime;
 
         //회전시켜줘
         Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
 
         //rigidbody에도 적용시커줘
-        Rigidbody.MoveRotation(Rigidbody.rotation * turnRotation);
+        rigidbody.MoveRotation(rigidbody.rotation * turnRotation);
     }
 
 
