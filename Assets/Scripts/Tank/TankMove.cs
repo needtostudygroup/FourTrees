@@ -1,33 +1,48 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TankMove : MonoBehaviour
 {
-    private float speed = 5.0f;
+    public float Speed = 12f;
+    public float TurnSpeed = 180f;
 
-    // Update is called once per frame
+    private string MovementAxisName;
+    private string TurnAxisName;
+
+    private Rigidbody Rigidbody;
+
+    private float MovementInputValue;
+    private float TurnInputValue;
+
+    void Start()
+    {
+        Rigidbody = GetComponent<Rigidbody>();
+        Rigidbody.isKinematic = true;
+
+        MovementAxisName = "Vertical";
+        TurnAxisName = "Horizontal";
+
+    }
+
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        }
-        
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(Vector3.left * speed * Time.deltaTime);
-        }
-        
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(Vector3.back * speed * Time.deltaTime);
-        }
-        
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(Vector3.right * speed * Time.deltaTime);
-        }
+        MovementInputValue = Input.GetAxis(MovementAxisName);
+        TurnInputValue = Input.GetAxis(TurnAxisName);
+
+        Vector3 movement = transform.forward * MovementInputValue * Speed * Time.deltaTime;
+
+        //rigidbody를 옮겨준다
+        Rigidbody.MovePosition(Rigidbody.position + movement);
+
+        float turn = TurnInputValue * TurnSpeed * Time.deltaTime;
+
+        //회전시켜줘
+        Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
+
+        //rigidbody에도 적용시커줘
+        Rigidbody.MoveRotation(Rigidbody.rotation * turnRotation);
     }
+
+
 }
