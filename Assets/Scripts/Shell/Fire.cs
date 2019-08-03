@@ -9,10 +9,9 @@ public class Fire : MonoBehaviour
     private const float MIN_POWER = 500.0f;
     private const float MAX_POWER = 3000.0f;
     public float currentPower;
+    private int sign = 1;
     private const float PUSH_TIME = 0.9f;
     private bool IsSpacePressed = false;
-    private bool IsMAX = false;
-    private bool IsMIN = true;
     public Transform firePosition;
     private float chargeSpeed;
     public Slider powerGage;
@@ -50,26 +49,20 @@ public class Fire : MonoBehaviour
         //space bar is being pressed
         if (IsSpacePressed)
         {
-            while(IsMIN)
+
+            currentPower += chargeSpeed * Time.deltaTime * sign;
+            powerGage.value = currentPower;
+
+            if (currentPower >= MAX_POWER)
             {
-                if (currentPower == MAX_POWER)
-                {
-                    IsMAX = true;
-                    break;
-                }
-                currentPower += chargeSpeed * Time.deltaTime;
+                sign = -1;
+                currentPower += chargeSpeed * Time.deltaTime * sign;
                 powerGage.value = currentPower;
             }
-            while(IsMAX)
+            else if (currentPower <= MIN_POWER)
             {
-                if(currentPower == MIN_POWER)
-                {
-                    IsMIN = true;
-                    break;
-                }
-                currentPower -= chargeSpeed * Time.deltaTime;
-                powerGage.value = currentPower;
+                sign = 1;
             }
-        } 
+        }
     }
 }
