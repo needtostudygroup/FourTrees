@@ -28,23 +28,19 @@ public class turretCtrl : MonoBehaviour
         verticalTurn = verticalTurn + turnVerticalInputValue * updownspeed * Time.deltaTime;
         horizontalTurn = horizontalTurn + turnHorizontaIInputValue * turnspeed * Time.deltaTime;
 
-        if (verticalTurn <= 0 && verticalTurn >= -80)
+
+        if (verticalTurn < -80)
         {
-            transform.rotation = Quaternion.Euler(verticalTurn, horizontalTurn, 0f);
+            transform.rotation = Quaternion.Euler(-80f, horizontalTurn, 0f);
+        }
+        else if (verticalTurn > 0)
+        {
+            transform.rotation = Quaternion.Euler(0f, horizontalTurn, 0f);
         }
         else
         {
-            if (verticalTurn < -80)
-            {
-                transform.rotation = Quaternion.Euler(-80f, horizontalTurn, 0f);
-            }
-            else if (verticalTurn > 0)
-            {
-                transform.rotation = Quaternion.Euler(0f, horizontalTurn, 0f);
-            }
-
+            transform.rotation = Quaternion.Euler(verticalTurn, horizontalTurn, 0f);
         }
-
     }
 
 }
