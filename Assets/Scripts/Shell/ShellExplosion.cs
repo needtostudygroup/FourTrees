@@ -1,31 +1,48 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class ShellExplosion : MonoBehaviour
 {
-    public LayerMask m_TankMask;
-    public ParticleSystem m_ExplosionParticles;       
-    public AudioSource m_ExplosionAudio;              
-    public float m_MaxDamage = 100f;                  
-    public float m_ExplosionForce = 1000f;            
-    public float m_MaxLifeTime = 2f;                  
-    public float m_ExplosionRadius = 5f;              
+    public Texture paintTexture;
+    public Shader paintableShader;
+    private Material paintableMaterial;
+    private Material hitObjectMaterial;
+    private RenderTexture hitObjectSplat;
 
-
-    private void Start()
+    private RaycastHit hit;
+    
+    // Start is called before the first frame update
+    void Start()
     {
-        Destroy(gameObject, m_MaxLifeTime);
+        paintableMaterial = new Material(paintableShader);
+        paintableMaterial.SetColor("_Color", Color.green);
+        paintableMaterial.SetTexture("_PaintTexture", paintTexture);
     }
 
-
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        // Find all the tanks in an area around the shell and damage them.
-    }
+        // HitableObject 를 만나면 오브젝트 사라짐
+        if (other.collider.CompareTag(GlobalVariable.HitableObject) && Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+        {
+            hitObjectMaterial = other.collider.gameObject.GetComponent<MeshRenderer>().material;
+            hitObjectSplat = (RenderTexture) hitObjectMaterial.GetTexture("_PaintSplat");
+            if (hitObjectSplat == null)
+            {
+                hitObjectSplat = new RenderTexture(1024, 1024, 0, RenderTextureFormat.ARGBFloat);
+                hitObjectMaterial.SetTexture("_PaintSplat", hitObjectSplat);
+            }
 
+            Debug.Log(hit.textureCoord);
+            paintableMaterial.SetVector("_Coordinate", new Vector4(hit.textureCoord.x, hit.textureCoord.y));
 
-    private float CalculateDamage(Vector3 targetPosition)
-    {
-        // Calculate the amount of damage a target should take based on it's position.
-        return 0f;
+            RenderTexture temp = RenderTexture.GetTemporary(hitObjectSplat.width, hitObjectSplat.height, 0, RenderTextureFormat.ARGBFloat);
+            Graphics.Blit(hitObjectSplat, temp);
+            Graphics.Blit(temp, hitObjectSplat, paintableMaterial);
+            
+            RenderTexture.ReleaseTemporary(temp);
+        }
     }
 }
