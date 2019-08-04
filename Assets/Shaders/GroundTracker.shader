@@ -10,6 +10,7 @@
         _Displacement ("Displacement", Range(0, 1.0)) = 0.3
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
+        _PaintSplat ("PaintSplat Map", 2D) = "black" {}
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -18,8 +19,6 @@
         CGPROGRAM
         #pragma surface surf Standard fullforwardshadows vertex:disp tessellate:tessDistance
         #pragma target 4.6
-        #include "Tessellation.cginc"
-
         #include "Tessellation.cginc"
 
         struct appdata {
@@ -37,14 +36,13 @@
             return UnityDistanceBasedTess(v0.vertex, v1.vertex, v2.vertex, minDist, maxDist, _Tess);
         }
 
-        sampler2D _Splat;
+        sampler2D _Splat, _PaintSplat;
         float _Displacement;
 
         void disp (inout appdata v)
         {
             float d = tex2Dlod(_Splat, float4(v.texcoord.xy,0,0)).r * _Displacement;
             v.vertex.xyz -= v.normal * d;
-            v.vertex.xyz += (v.normal * _Displacement);
         }
         
         sampler2D _GroundTex;
@@ -56,6 +54,8 @@
             float2 uv_GroundTex;
             float2 uv_DentTex;
             float2 uv_Splat;
+            float2 uv_PaintSplat;
+            float2 uv_PaintTexture;
         };
         
         half _Glossiness;
@@ -66,9 +66,12 @@
         UNITY_INSTANCING_BUFFER_END(Props)
 
         void surf (Input IN, inout SurfaceOutputStandard o) {
-            half amount = tex2Dlod(_Splat, float4(IN.uv_Splat, 0, 0));
-            fixed4 c = lerp(tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, tex2D(_DentTex, IN.uv_DentTex) * _DentColor, amount);
-        
+            half4 amount = tex2Dlod(_Splat, float4(IN.uv_Splat, 0, 0));
+            fixed4 c = lerp(tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, tex2D(_DentTex, IN.uv_DentTex) * _DentColor, amount.r);
+            
+            amount = tex2Dlod(_PaintSplat, float4(IN.uv_PaintSplat, 0, 0));
+            c += amount;
+            
             o.Albedo = c.rgb;
             // Metallic and smoothness come from slider variables
             o.Metallic = _Metallic;
