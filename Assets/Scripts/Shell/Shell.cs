@@ -6,7 +6,8 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     private Rigidbody rigidbody;
-    
+    public AudioClip collisionSound;
+
     // Shell을 Tracking 하는 카메라
     private Camera camera;
     
@@ -36,6 +37,7 @@ public class Shell : MonoBehaviour
         // HitableObject 를 만나면 오브젝트 사라짐
         if (other.collider.tag == GlobalVariable.HitableObject)
         {
+            AudioSource.PlayClipAtPoint(collisionSound, this.transform.position);
             Destroy(gameObject);
         }
     }

@@ -12,6 +12,7 @@ public class Fire : MonoBehaviour
     private int sign = 1;
     private const float PUSH_TIME = 0.9f;
     private bool IsSpacePressed = false;
+    public AudioSource shootingSound;
     public Transform firePosition;
     private float chargeSpeed;
     public Slider powerGage;
@@ -41,6 +42,7 @@ public class Fire : MonoBehaviour
         {
             shell.power = currentPower;
             Instantiate(shell, firePosition.position, firePosition.rotation);
+            shootingSound.Play();
             IsSpacePressed = false;
             //reset
             currentPower = MIN_POWER;
