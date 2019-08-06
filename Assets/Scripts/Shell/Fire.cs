@@ -34,7 +34,7 @@ public class Fire : MonoBehaviour
         //push space bar
         if (Input.GetKeyDown(KeyCode.Space) == true)
         {
-            shell.direction = this.transform.forward + new Vector3(0, 1.0f, 0);
+            shell.direction = firePosition.transform.forward;
             IsSpacePressed = true;
         }
         //released spcae bar
