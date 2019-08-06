@@ -5,7 +5,7 @@ using UnityEngine;
 public class WheelTracks : MonoBehaviour
 {
     // 스키드마크 크기
-    [UnityEngine.Range(1, 1000)]
+    [UnityEngine.Range(1, 5000)]
     public float size;
     
     // 스키드마크 굵기
@@ -25,7 +25,7 @@ public class WheelTracks : MonoBehaviour
     void Start()
     {
         splatMap = new RenderTexture(1024, 1024, 0, RenderTextureFormat.ARGBFloat);
-        mapMaterial = map.GetComponent<MeshRenderer>().material;
+        mapMaterial = map.GetComponent<Terrain>().materialTemplate;
         mapMaterial.SetTexture("_Splat", splatMap);
         drawMaterial = new Material(shader);
     }
