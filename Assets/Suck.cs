@@ -51,19 +51,30 @@ public class Suck : MonoBehaviour
             // 마우스 좌클릭
             if (Input.GetMouseButton(0))
             {
-                
+                RenderTexture terrainChangedMap = (RenderTexture) material.GetTexture("_TerrainChangedMap");
+                ModifyTerrain(terrainChangedMap, -1);
             }
             
             // 마우스 우클릭
             else if (Input.GetMouseButton(1))
             {
-                suckMaterial.SetVector("_Coordinate", hit.textureCoord);
                 RenderTexture terrainChangedMap = (RenderTexture) material.GetTexture("_TerrainChangedMap");
-                temp = RenderTexture.GetTemporary(terrainChangedMap.width, terrainChangedMap.height, 0, terrainChangedMap.format);
-                Graphics.Blit(terrainChangedMap, temp);
-                Graphics.Blit(temp, terrainChangedMap, suckMaterial);
-                RenderTexture.ReleaseTemporary(temp);
+                ModifyTerrain(terrainChangedMap, 1);
             }
         }
+    }
+
+    /**
+     * 지형을 바꾸는 메소드
+     */
+    private void ModifyTerrain(RenderTexture terrainChangedMap, float direction)
+    {
+        suckMaterial.SetVector("_Coordinate", hit.textureCoord);
+        suckMaterial.SetFloat("_Direction", direction);
+        
+        RenderTexture temp = RenderTexture.GetTemporary(terrainChangedMap.width, terrainChangedMap.height, 0, terrainChangedMap.format);
+        Graphics.Blit(terrainChangedMap, temp);
+        Graphics.Blit(temp, terrainChangedMap, suckMaterial);
+        RenderTexture.ReleaseTemporary(temp);
     }
 }
