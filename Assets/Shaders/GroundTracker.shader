@@ -12,6 +12,8 @@
         _Metallic ("Metallic", Range(0,1)) = 0.0
         _PaintSplat ("PaintSplat Map", 2D) = "black" {}
         _CursorSplat ("CursorSplat Map", 2D) = "black" {}
+        _TerrainChangedMap ("TerrainChangedMap", 2D) = "black" {}
+        _TerrainDisplacement ("Terrain Displacement", Range(1, 10)) = 1.5
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -32,18 +34,20 @@
         float _Tess;
 
         float4 tessDistance (appdata v0, appdata v1, appdata v2) {
-            float minDist = 10.0;
-            float maxDist = 25.0;
-            return UnityDistanceBasedTess(v0.vertex, v1.vertex, v2.vertex, minDist, maxDist, _Tess);
+//            float minDist = 0.0;
+//            float maxDist = 100.0;
+//            return UnityDistanceBasedTess(v0.vertex, v1.vertex, v2.vertex, minDist, maxDist, _Tess);
+            return _Tess;
         }
 
-        sampler2D _Splat, _PaintSplat, _CursorSplat;
-        float _Displacement;
+        sampler2D _Splat, _PaintSplat, _CursorSplat, _TerrainChangedMap;
+        float _Displacement, _TerrainDisplacement;
 
         void disp (inout appdata v)
         {
             float d = tex2Dlod(_Splat, float4(v.texcoord.xy,0,0)).r * _Displacement;
             v.vertex.xyz -= v.normal * d;
+            v.vertex.xyz += v.normal * tex2Dlod(_TerrainChangedMap, float4(v.texcoord.xy, 0, 0)).r * _TerrainDisplacement;
         }
         
         sampler2D _GroundTex;
@@ -58,6 +62,7 @@
             float2 uv_PaintSplat;
             float2 uv_PaintTexture;
             float2 uv_CursorSplat;
+            float2 uv_TerrainChangedMap;
         };
         
         half _Glossiness;
@@ -74,15 +79,15 @@
             amount = tex2Dlod(_PaintSplat, float4(IN.uv_PaintSplat, 0, 0));
             c += amount;
             
+            amount = tex2Dlod(_TerrainChangedMap, float4(IN.uv_TerrainChangedMap, 0, 0));
+            c += amount / 10;
+            
             amount = tex2Dlod(_CursorSplat, float4(IN.uv_CursorSplat, 0, 0));
             if (amount.r > 0.5 || amount.g > 0 || amount.b > 0) {
                 c = amount;
             }
             
             o.Albedo = c.rgb;
-            // Metallic and smoothness come from slider variables
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
             o.Alpha = c.a;
         }
         ENDCG
