@@ -32,7 +32,7 @@ public class Fire : MonoBehaviour
     void Update()
     {
         //push space bar
-        if (Input.GetKeyDown(KeyCode.Space) == true)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             shell.direction = this.transform.forward + new Vector3(0, 1.0f, 0);
             IsSpacePressed = true;

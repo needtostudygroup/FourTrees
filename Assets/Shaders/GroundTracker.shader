@@ -11,6 +11,7 @@
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
         _PaintSplat ("PaintSplat Map", 2D) = "black" {}
+        _CursorSplat ("CursorSplat Map", 2D) = "black" {}
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -36,7 +37,7 @@
             return UnityDistanceBasedTess(v0.vertex, v1.vertex, v2.vertex, minDist, maxDist, _Tess);
         }
 
-        sampler2D _Splat, _PaintSplat;
+        sampler2D _Splat, _PaintSplat, _CursorSplat;
         float _Displacement;
 
         void disp (inout appdata v)
@@ -56,6 +57,7 @@
             float2 uv_Splat;
             float2 uv_PaintSplat;
             float2 uv_PaintTexture;
+            float2 uv_CursorSplat;
         };
         
         half _Glossiness;
@@ -71,6 +73,11 @@
             
             amount = tex2Dlod(_PaintSplat, float4(IN.uv_PaintSplat, 0, 0));
             c += amount;
+            
+            amount = tex2Dlod(_CursorSplat, float4(IN.uv_CursorSplat, 0, 0));
+            if (amount.r > 0.5 || amount.g > 0 || amount.b > 0) {
+                c = amount;
+            }
             
             o.Albedo = c.rgb;
             // Metallic and smoothness come from slider variables
