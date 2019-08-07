@@ -848,9 +848,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1153877802}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52c0176ddae3d19448f373e950972280, type: 3}
+  m_Script: {fileID: 11500000, guid: dfdb4c434dc318e4bb9de2d410efcaf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
 --- !u!23 &1153877805
 MeshRenderer:
   m_ObjectHideFlags: 0
