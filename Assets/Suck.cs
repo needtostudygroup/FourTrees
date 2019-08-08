@@ -13,6 +13,9 @@ public class Suck : MonoBehaviour
     private Camera camera;
     private Ray ray;
     private RaycastHit hit;
+
+    [UnityEngine.Range(0, 1)]
+    public float speed = 1;
     
     // Start is called before the first frame update
     void Start()
@@ -26,6 +29,7 @@ public class Suck : MonoBehaviour
         suckMouseMaterial.SetColor("_Color", Color.yellow);
         
         suckMaterial.SetFloat("_CursorSize", cursorSize);
+        suckMaterial.SetFloat("_Speed", speed);
     }
 
     // Update is called once per frame
