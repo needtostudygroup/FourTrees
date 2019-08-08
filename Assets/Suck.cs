@@ -33,7 +33,7 @@ public class Suck : MonoBehaviour
     {
         ray = camera.ScreenPointToRay(Input.mousePosition);
         
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out hit, 30f))
         {
             Terrain terrain = hit.collider.gameObject.GetComponent<Terrain>();
             if (terrain == null)
@@ -43,10 +43,7 @@ public class Suck : MonoBehaviour
             suckMouseMaterial.SetVector("_Coordinate", hit.textureCoord);
             Material material = terrain.materialTemplate;
             RenderTexture cursorSplat = (RenderTexture) material.GetTexture("_CursorSplat");
-            RenderTexture temp = RenderTexture.GetTemporary(cursorSplat.width, cursorSplat.height, 0, cursorSplat.format);
-            Graphics.Blit(cursorSplat, temp);
-            Graphics.Blit(temp, cursorSplat, suckMouseMaterial);
-            RenderTexture.ReleaseTemporary(temp);
+            Graphics.Blit(cursorSplat, cursorSplat, suckMouseMaterial);
             
             // 마우스 좌클릭
             if (Input.GetMouseButton(0))
